@@ -7,10 +7,9 @@ interface IJob {
     date: Date;
   }
 
-  const jobSchema: Schema<IJob> = new Schema({
-    identity: { type: String, required: true },
+  const jobSchema = new Schema<IJob>({
     name: { type: String, required: true },
     status: { type: Boolean,required: true  },
     date: { type: Date, required: true },
   });
-export default mongoose.model("jobs", jobSchema)
+export default mongoose.model<IJob>("jobs", jobSchema)
