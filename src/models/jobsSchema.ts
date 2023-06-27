@@ -1,15 +1,15 @@
 import mongoose, { Schema } from "mongoose"
-interface IJob {
-    _id: { $oid: string };
-    identity: string;
-    name: string;
-    status: boolean;
-    date: Date;
-  }
+import { jobType } from './typeInterface';
 
-  const jobSchema = new Schema<IJob>({
-    name: { type: String, required: true },
-    status: { type: Boolean,required: true  },
-    date: { type: Date, required: true },
-  });
-export default mongoose.model<IJob>("jobs", jobSchema)
+const jobSchema = new Schema<jobType>({
+  _id: { type: String, required: true },
+  name: { type: String, required: true },
+  status: { type: Boolean, required: true },
+  date: { type: Date, required: false },
+  location: { type: String, require: false },
+  jobDescription: { type: String,require: true },
+  companyDescription: { type: String, require: false },
+  requierments: { type: [String], require: true }
+
+});
+export default mongoose.model<jobType>("jobs", jobSchema)

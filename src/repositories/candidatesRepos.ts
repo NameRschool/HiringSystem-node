@@ -1,34 +1,34 @@
 const db = require('../models/db');
-import Job from '../models/jobsSchema';
-import { jobType } from '../models/typeInterface';
+import Candidates from '../models/candidatesSchema';
+import { candidatesType } from '../models/typeInterface';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
 
 
-class JobRepo {
+class CandidatesRepo {
   constructor() {
     db.connect();
   }
 
-  async getAll(): Promise<jobType[] | void> {
+  async getAll(): Promise<candidatesType[] | void> {
     try {
-      return await Job.find({});
+      return await Candidates.find({});
     } catch (error) {
       console.error(`error:${error}`)
     }
   }
 
-  async getById(_id: String | ParamsDictionary | ParsedQs): Promise<jobType | void | null> {
+  async getById(_id: String | ParamsDictionary | ParsedQs): Promise<candidatesType | void | null> {
     try {
-      return await Job.findById({ _id });
+      return await Candidates.findById({ _id });
     } catch (error) {
       console.error(`error:${error}`)
     }
   }
 
-  async create(newJob: jobType): Promise<void | null> {
+  async create(newJob: candidatesType): Promise<void | null> {
     try {
-      await Job.create(newJob);
+      await Candidates.create(newJob);
     } catch (error) {
       console.error(`error:${error}`)
     }
@@ -36,7 +36,7 @@ class JobRepo {
 
   async deleteById(id: string | ParamsDictionary): Promise<void | null> {
     try {
-      await Job.findByIdAndRemove(id);
+      await Candidates.findByIdAndRemove(id);
     } catch (error) {
       console.error(`error:${error}`)
     }
@@ -44,7 +44,7 @@ class JobRepo {
 
   async updateById(id: string | ParamsDictionary, props: any): Promise<void | null> {
     try {
-     return await Job.findByIdAndUpdate(id, props);
+     return await Candidates.findByIdAndUpdate(id, props);
     } catch (error) {
       console.error(`error:${error}`)
     }
@@ -52,4 +52,4 @@ class JobRepo {
 
 }
 
-export default new JobRepo();
+export default new CandidatesRepo();
