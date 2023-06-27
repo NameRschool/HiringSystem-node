@@ -6,9 +6,9 @@ const { v4: uuidv4 } = require('uuid');
 class CandidatesApi{
     async get(req: Request, res: Response): Promise<void> {
         try {
-          const jobs = await candidatesServices.getAll();
-          console.log('Retrieved jobs:', jobs);
-          res.json(jobs);
+          const candidates = await candidatesServices.getAll();
+          console.log('Retrieved jobs:', candidates);
+          res.json(candidates);
         } catch (error) {
           console.error('Failed to retrieve jobs', error);
           res.status(500).json({ error: 'Failed to retrieve jobs' });
