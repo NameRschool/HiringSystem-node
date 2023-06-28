@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import jobService from '../services/jobServices';
 import { jobType } from '../models/typeInterface';
-const { v4: uuidv4 } = require('uuid');
+import { validateEntityExistence } from '../lib/validationsFunc';
+import { validateEntityNotExistence } from '../lib/validationsFunc';
+import { v4 as uuidv4 } from 'uuid';
 
 class JobApi {
   async get(req: Request, res: Response): Promise<void> {
@@ -19,9 +21,7 @@ class JobApi {
     const { _id } = req.params;
     try {
       const jobId = await jobService.getById(_id);
-      if (!jobId) {
-        res.status(404).json({ error: 'the id does not exist' });
-      }
+      await validateEntityExistence(jobService,_id,'jobs',res);
       res.json(jobId);
     } catch (error) {
       console.error('Failed to retrieve job', error);
@@ -33,14 +33,10 @@ class JobApi {
     const _id = uuidv4();
     const status = true;
     const date = new Date();
-    const { name, location, jobDescription, companyDescription, requierments }: jobType = req.body;
+    const { name, location, jobDescription, companyDescription, requierments, candidatesList }: jobType = req.body;
     try {
-      const jobId = await jobService.getById(_id);
-      if (jobId) {
-        console.error('job with the provided ID already exists');
-        return res.status(404).json({ error: 'The id is in use' });
-      }
-      const createdJob = await jobService.create({ _id, name, status, date, location, jobDescription, companyDescription, requierments });
+      await validateEntityNotExistence(jobService,_id,'jobs',res)
+      await jobService.create({ _id, name, status, date, location, jobDescription, companyDescription, requierments,candidatesList });
       res.json(`job saved successfully- ${name}`);
     } catch (error) {
       console.error('Failed to retrieve job', error);
@@ -51,15 +47,12 @@ class JobApi {
   async updateById(req: Request, res: Response) {
     const { _id } = req.params;
     try {
-      const existingJob = await jobService.getById(_id);
-      if (!existingJob) {
-        return res.status(404).json({ error: 'Job not found' });
-      }
+      await validateEntityExistence(jobService,_id,'jobs',res);
       const job = await jobService.updateById(_id, req.body);
       if (!job) {
         return res.status(404).json({ error: 'Failed to update job' });
       }
-      res.json(`job update saved successfully- ${existingJob.name}`);
+      res.json(`job update saved successfully- ${req.body}`);
     } catch (error) {
       console.error('Failed to update job', error);
       res.status(500).json({ error: 'Failed to update job' });
@@ -69,10 +62,7 @@ class JobApi {
   async deleteById(req: Request, res: Response) {
     const { _id } = req.params;
     try {
-      const jobId = jobService.getById(_id);
-      if (!jobId) {
-        return res.status(404).json({ error: 'The id does not exist' });
-      }
+      await validateEntityExistence(jobService,_id,'jobs',res);
       await jobService.deleteById(_id);
       res.json(`job deleted successfully`);
 
