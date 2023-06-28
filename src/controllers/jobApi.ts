@@ -48,7 +48,6 @@ class JobApi {
     }
   }
 
-
   async updateById(req: Request, res: Response) {
     const { _id } = req.params;
     try {
@@ -56,28 +55,25 @@ class JobApi {
       if (!existingJob) {
         return res.status(404).json({ error: 'Job not found' });
       }
-
-      const updatedJob = { ...existingJob, ...req.body };
-      const job = await jobService.updateById(_id, {updatedJob});
+      const job = await jobService.updateById(_id, req.body);
       if (!job) {
         return res.status(404).json({ error: 'Failed to update job' });
       }
-      res.json(job);
+      res.json(`job update saved successfully- ${existingJob.name}`);
     } catch (error) {
       console.error('Failed to update job', error);
       res.status(500).json({ error: 'Failed to update job' });
     }
   }
 
-
   async deleteById(req: Request, res: Response) {
     const { _id } = req.params;
     try {
       const jobId = jobService.getById(_id);
       if (!jobId) {
-        return res.status(404).json({ error: 'The id is in use' });
+        return res.status(404).json({ error: 'The id does not exist' });
       }
-      const job = await jobService.deleteById(_id);
+      await jobService.deleteById(_id);
       res.json(`job deleted successfully`);
 
     } catch (error) {
