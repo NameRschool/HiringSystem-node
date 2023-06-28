@@ -27,3 +27,8 @@ async function validateEntityNotExistence<T>(
   return existingEntity;
 }
 export { validateEntityNotExistence };
+
+async function validateReqBodyProp( bodyProp:any): Promise<void> {
+  
+}
+export { validateReqBodyProp };
