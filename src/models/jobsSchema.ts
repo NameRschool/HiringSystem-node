@@ -8,7 +8,7 @@ const jobSchema = new Schema<jobType>({
   status: { type: Boolean, required: true },
   date: { type: Date, required: true },
   location: { type: String, require: false },
-  jobDescription: { type: String,require: true },
+  jobDescription: { type: String,require: false },
   companyDescription: { type: String, require: false },
   requierments: { type: [String], require: true },
   candidatesList: { type: [{ 

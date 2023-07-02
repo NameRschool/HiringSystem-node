@@ -9,8 +9,9 @@ class JobApi {
   async get(req: Request, res: Response): Promise<void> {
     try {
       const jobs = await jobService.getAll();
-      console.log('Retrieved jobs:', jobs);
+      console.log('Retrieved jobs:',jobs);
       res.json(jobs);
+
     } catch (error) {
       console.error('Failed to retrieve jobs', error);
       res.status(500).json({ error: 'Failed to retrieve jobs' });
