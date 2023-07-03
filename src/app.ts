@@ -6,7 +6,7 @@ import candidatesRouter from './routers/candidatesRouter'
 import cors from 'cors';
 dotenv.config();
 
-const port: string | number =process.env.PORT || 3002;
+const port: string | number =process.env.PORT || 3003;
 const app: Express = express();
 app.use(express.json());
 app.use(bodyParser.json());

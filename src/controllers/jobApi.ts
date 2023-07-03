@@ -4,12 +4,13 @@ import { jobType } from '../models/typeInterface';
 import { validateEntityExistence } from '../lib/validationsFunc';
 import { validateEntityNotExistence } from '../lib/validationsFunc';
 import { v4 as uuidv4 } from 'uuid';
+import candidatesServices from '../services/candidatesServices';
 
 class JobApi {
   async get(req: Request, res: Response): Promise<void> {
     try {
       const jobs = await jobService.getAll();
-      console.log('Retrieved jobs:',jobs);
+      console.log('Retrieved jobs:', jobs);
       res.json(jobs);
 
     } catch (error) {
@@ -22,8 +23,21 @@ class JobApi {
     const { _id } = req.params;
     try {
       const jobId = await jobService.getById(_id);
-      await validateEntityExistence(jobService,_id,'jobs',res);
+      await validateEntityExistence(jobService, _id, 'jobs', res);
       res.json(jobId);
+    } catch (error) {
+      console.error('Failed to retrieve job', error);
+      res.status(500).json({ error: 'Failed to retrieve job' });
+    }
+  }
+
+  async getCandidatesListById(req: Request, res: Response): Promise<void> {
+    const { _id } = req.params;
+    try {
+      const job = await jobService.getById(_id);
+      await validateEntityExistence(jobService, _id, 'jobs', res);
+      const candidatesList = job?.candidatesList;
+      res.json(candidatesList);
     } catch (error) {
       console.error('Failed to retrieve job', error);
       res.status(500).json({ error: 'Failed to retrieve job' });
@@ -36,8 +50,8 @@ class JobApi {
     const date = new Date();
     const { name, location, jobDescription, companyDescription, requierments, candidatesList }: jobType = req.body;
     try {
-      await validateEntityNotExistence(jobService,_id,'jobs',res)
-      await jobService.create({ _id, name, status, date, location, jobDescription, companyDescription, requierments,candidatesList });
+      await validateEntityNotExistence(jobService, _id, 'jobs', res)
+      await jobService.create({ _id, name, status, date, location, jobDescription, companyDescription, requierments, candidatesList });
       res.json(`job saved successfully- ${name}`);
     } catch (error) {
       console.error('Failed to retrieve job', error);
@@ -48,7 +62,7 @@ class JobApi {
   async updateById(req: Request, res: Response) {
     const { _id } = req.params;
     try {
-      await validateEntityExistence(jobService,_id,'jobs',res);
+      await validateEntityExistence(jobService, _id, 'jobs', res);
       const job = await jobService.updateById(_id, req.body);
       if (!job) {
         return res.status(404).json({ error: 'Failed to update job' });
@@ -63,7 +77,7 @@ class JobApi {
   async deleteById(req: Request, res: Response) {
     const { _id } = req.params;
     try {
-      await validateEntityExistence(jobService,_id,'jobs',res);
+      await validateEntityExistence(jobService, _id, 'jobs', res);
       await jobService.deleteById(_id);
       res.json(`job deleted successfully`);
 

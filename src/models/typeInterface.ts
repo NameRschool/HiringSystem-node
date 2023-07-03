@@ -19,7 +19,7 @@ export interface jobType {
   jobDescription: String;
   companyDescription: string;
   requierments: [String]
-  candidatesList: [candidatesInfo]
+  candidatesList: candidatesInfo[]
 }
 
 export interface candidatesType {
