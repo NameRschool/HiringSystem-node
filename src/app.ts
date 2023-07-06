@@ -19,9 +19,6 @@ app.use(jobRouter);
 app.use(candidatesRouter)
 
 
-// app.listen(port, () => {
-//   console.log(`I am up in http://127.0.0.1:${port}`);
-// });
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof SyntaxError && 'body' in err) {
     res.status(400).json({ error: 'Invalid JSON' });
