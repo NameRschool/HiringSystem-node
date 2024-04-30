@@ -36,7 +36,7 @@ To run the project local, follow the following steps:
    npm start
    ```
 2. Run the customer:
-   ```bash
+   ``` bash
   npm start
   ```
 
