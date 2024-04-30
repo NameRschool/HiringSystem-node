@@ -38,7 +38,8 @@ To run the project local, follow the following steps:
 2. Run the customer:
    ```bash
   cd client
-  npm start   ```
+  npm start
+  ```
 
 3. Make an app at http: // Localhost: 3000.
 
